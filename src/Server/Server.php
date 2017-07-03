@@ -7,7 +7,7 @@
 namespace Ychabaniuk\ServerRunner\Server;
 
 use DirectoryIterator;
-use App\Extension\Debug;
+use Ychabaniuk\ServerRunner\Debug;
 
 class Server {
 
