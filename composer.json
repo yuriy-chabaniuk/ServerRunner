@@ -1,0 +1,22 @@
+{
+    "name": "ychabaniuk/server-runner",
+    "description": "Extension for Codeception to run server based on browser.",
+    "version": "0.9",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yuriy Chabaniuk",
+            "email": "y.chabaniuk@grt-team.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Ychabaniuk\\ServerRunner\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.4.0"
+    }
+}
