@@ -1,7 +1,7 @@
 # ServerRunner
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![Total Downloads](https://poser.pugx.org/codeception/codeception/downloads.png)](https://packagist.org/packages/yuriy-chabaniuk/ServerRunner)
+[![Total Downloads](https://poser.pugx.org/yuriy-chabaniuk/server-runner/downloads.png)](https://packagist.org/packages/yuriy-chabaniuk/ServerRunner)
 
 Extension for Codeception to run server based on browser.
 
