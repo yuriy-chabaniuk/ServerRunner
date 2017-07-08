@@ -73,7 +73,6 @@ class ServerRunner extends Extension {
     private function makeServer($browser) {
         $serverKey = $this->getServerKey($browser);
 
-
         if (isset($this->serverToClassMap[$serverKey])) {
             $class = $this->build($this->serverToClassMap[$serverKey]);
 
@@ -109,7 +108,7 @@ class ServerRunner extends Extension {
         $abstract = __NAMESPACE__ . "\\Server\\$class";
 
         if (class_exists($abstract)) {
-            $concrete = new $abstract($this->config);
+            $concrete = new $abstract($this->config, $this);
 
             if ($concrete instanceof ServerInterface) {
                 return $concrete->setBrowser($this->browser);
@@ -154,6 +153,7 @@ class ServerRunner extends Extension {
                             if ($this->config['debug']) {
                                 $this->message("Stopping server: {$concreteServer->name()}");
                             }
+
                             $concreteServer->stop();
                         }
                     }
@@ -173,6 +173,7 @@ class ServerRunner extends Extension {
      */
     public function suiteBefore(SuiteEvent $e) {
         if ($this->hasModule('WebDriver')) {
+
             $webDriver = $this->getModule('WebDriver');
 
             $reflection = new ReflectionClass($webDriver);
