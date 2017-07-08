@@ -108,7 +108,7 @@ class ServerRunner extends Extension {
         $abstract = __NAMESPACE__ . "\\Server\\$class";
 
         if (class_exists($abstract)) {
-            $concrete = new $abstract($this->config);
+            $concrete = new $abstract($this->config, $this);
 
             if ($concrete instanceof ServerInterface) {
                 return $concrete->setBrowser($this->browser);

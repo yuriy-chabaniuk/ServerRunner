@@ -30,3 +30,13 @@ env:
 #                    delay: 700
                     capabilities:
                         unexpectedAlertBehaviour: 'accept'
+
+    chrome:
+        modules:
+            config:
+                WebDriver:
+                    browser: chrome
+                    window_size: 1366x768
+#                    delay: 700
+                    capabilities:
+                        unexpectedAlertBehaviour: 'accept'

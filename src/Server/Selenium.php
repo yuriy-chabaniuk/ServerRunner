@@ -7,13 +7,13 @@ namespace Ychabaniuk\ServerRunner\Server;
 
 use DirectoryIterator;
 
-class Selenium extends Server implements ServerInterface {
+class Selenium extends Server {
 
     public function name() {
         return 'selenium';
     }
 
-    public function start() {
+    public function doStart() {
         $server = $this->findServerFile('selenium');
 
         $driverPart = null;
@@ -34,7 +34,7 @@ class Selenium extends Server implements ServerInterface {
         $this->shell($cmd);
     }
 
-    public function stop() {
+    public function doStop() {
         return $this->killProcess('selenium');
     }
 
@@ -44,18 +44,7 @@ class Selenium extends Server implements ServerInterface {
         return $this->start();
     }
 
-    public function isUp() {
-        $curl = curl_init('127.0.0.1:' . self::DEFAULT_PORT . '/status');
-
-        curl_setopt($curl, CURLOPT_HTTPGET, 1);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-        $response = curl_exec($curl);
-
-        return $this->validateStatus($response);
-    }
-
-    private function validateStatus($response) {
+    protected function validateServerStatus($response) {
         if ($response) {
             if (is_string($response)) {
                 return strpos($response, 'div id="content"') > 0;

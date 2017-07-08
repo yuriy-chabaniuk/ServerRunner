@@ -9,8 +9,9 @@ namespace Ychabaniuk\ServerRunner\Server;
 use DirectoryIterator;
 use Ychabaniuk\ServerRunner\Debug;
 use Codeception\Exception\ExtensionException;
+use Codeception\Platform\Extension;
 
-class Server {
+abstract class Server implements ServerInterface {
 
     use Debug;
 
@@ -20,8 +21,71 @@ class Server {
 
     protected $browser = null;
 
-    public function __construct($config) {
+    /**
+     * @var \Codeception\Platform\Extension|null
+     */
+    protected $extension = null;
+
+    public function __construct($config, Extension $extension) {
         $this->config = $config;
+        $this->extension = $extension;
+    }
+
+    abstract protected function doStart();
+
+    abstract protected function doStop();
+
+    abstract protected function validateServerStatus($validateServerStatus);
+
+    public function start() {
+        $this->doStart();
+
+        /* Let server completely start */
+        sleep(1);
+
+        if ($this->isUp()) {
+            return true;
+        }
+
+        throw new ExtensionException($this->extension, "Failure to start server {$this->name()}. ");
+    }
+
+    public function stop() {
+        $this->doStop();
+
+        sleep(1);
+        if (!$this->isUp()) {
+            return true;
+        }
+
+        throw new ExtensionException($this->extension, "Failure to stop server {$this->name()}. ");
+    }
+
+    public function restart() {
+        $this->stop();
+
+        return $this->start();
+    }
+
+    public function isUp() {
+        $curl = curl_init('127.0.0.1:' . $this->getPort() . '/status');
+
+        curl_setopt($curl, CURLOPT_HTTPGET, 1);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+        $response = curl_exec($curl);
+
+        if ($response) {
+            if ($this->config('debug')) {
+                $this->message(
+                    ucfirst($this->name()) . " status response: ", $response
+                );
+            }
+
+            return $this->validateServerStatus($response);
+        }
+
+        return false;
     }
 
     public function config($key) {
