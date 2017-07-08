@@ -173,6 +173,7 @@ class ServerRunner extends Extension {
      */
     public function suiteBefore(SuiteEvent $e) {
         if ($this->hasModule('WebDriver')) {
+
             $webDriver = $this->getModule('WebDriver');
 
             $reflection = new ReflectionClass($webDriver);

@@ -24,6 +24,8 @@ class Phantom extends Server implements ServerInterface {
         }
 
         $this->shell($cmd);
+
+        sleep(1);
     }
 
     public function stop() {

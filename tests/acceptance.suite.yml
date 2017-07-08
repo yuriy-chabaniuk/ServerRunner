@@ -7,6 +7,26 @@
 actor: AcceptanceTester
 modules:
     enabled:
-        - PhpBrowser:
-            url: http://localhost/myapp
         - \Helper\Acceptance
+        - WebDriver:
+            url: http://localhost/myapp
+
+extensions:
+    enabled:
+        - Ychabaniuk\ServerRunner\ServerRunner
+    config:
+        Ychabaniuk\ServerRunner\ServerRunner:
+            serverFolder: 'libs/server/'
+            driverFolder: 'libs/driver/'
+            debug: true
+
+env:
+    phantomjs:
+        modules:
+            config:
+                WebDriver:
+                    browser: phantomjs
+                    window_size: 1366x768
+#                    delay: 700
+                    capabilities:
+                        unexpectedAlertBehaviour: 'accept'

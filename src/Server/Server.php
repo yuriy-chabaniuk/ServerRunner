@@ -43,11 +43,11 @@ class Server {
     public function findServerFile($server) {
         $folder = $this->config('serverFolder');
 
+        $server = $this->serverOSBased($folder, $server);
+
         if ($this->config('debug')) {
             $this->message("Find server: '{$server}' in folder: '{$folder}'");
         }
-
-        $server = $this->serverOSBased($folder, $server);
 
         $serverFile = null;
         foreach (new DirectoryIterator($folder) as $file) {
@@ -69,7 +69,7 @@ class Server {
             return $folder . $serverFile;
         }
 
-        throw new ExtensionException("Server file is not found in {$folder}. Server: {$server}");
+        throw new ExtensionException($this,"Server file is not found in {$folder}. Server: {$server}");
     }
 
     private function serverOSBased($folder, $server) {
@@ -90,12 +90,16 @@ class Server {
         return $server;
     }
 
-    private function isWindows() {
-        return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+    protected function isWindows() {
+        return strtoupper(substr($this->getOS(), 0, 3)) === 'WIN';
     }
 
-    private function isLinux() {
-        return PHP_OS === 'Linux';
+    protected function isLinux() {
+        return $this->getOS() === 'Linux';
+    }
+
+    public function getOS() {
+        return PHP_OS;
     }
 
     public function getPort() {
