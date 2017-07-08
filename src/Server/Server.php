@@ -8,6 +8,7 @@ namespace Ychabaniuk\ServerRunner\Server;
 
 use DirectoryIterator;
 use Ychabaniuk\ServerRunner\Debug;
+use Codeception\Exception\ExtensionException;
 
 class Server {
 
@@ -46,6 +47,8 @@ class Server {
             $this->message("Find server: '{$server}' in folder: '{$folder}'");
         }
 
+        $server = $this->serverOSBased($folder, $server);
+
         $serverFile = null;
         foreach (new DirectoryIterator($folder) as $file) {
             if ($file->isFile()) {
@@ -56,12 +59,43 @@ class Server {
                     if ($this->config('debug')) {
                         $this->message('Server file found: ', $serverFile);
                     }
+
                     break;
                 }
             }
         }
 
-        return $folder . $serverFile;
+        if (!is_null($serverFile)) {
+            return $folder . $serverFile;
+        }
+
+        throw new ExtensionException("Server file is not found in {$folder}. Server: {$server}");
+    }
+
+    private function serverOSBased($folder, $server) {
+        $isSelfHosted = strpos($folder, 'libs/server') !== false;
+
+        if ($isSelfHosted) {
+            if ($server === 'phantomjs') {
+                if ($this->isLinux()) {
+                    $server .= '-linux';
+                } elseif ($this->isWindows()) {
+                    $server .= '.exe';
+                } else {
+                    $server .= '-mac';
+                }
+            }
+        }
+
+        return $server;
+    }
+
+    private function isWindows() {
+        return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+    }
+
+    private function isLinux() {
+        return PHP_OS === 'Linux';
     }
 
     public function getPort() {

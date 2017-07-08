@@ -73,7 +73,6 @@ class ServerRunner extends Extension {
     private function makeServer($browser) {
         $serverKey = $this->getServerKey($browser);
 
-
         if (isset($this->serverToClassMap[$serverKey])) {
             $class = $this->build($this->serverToClassMap[$serverKey]);
 
@@ -154,6 +153,7 @@ class ServerRunner extends Extension {
                             if ($this->config['debug']) {
                                 $this->message("Stopping server: {$concreteServer->name()}");
                             }
+
                             $concreteServer->stop();
                         }
                     }

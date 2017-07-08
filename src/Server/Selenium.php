@@ -17,7 +17,6 @@ class Selenium extends Server implements ServerInterface {
         $server = $this->findServerFile('selenium');
 
         $driverPart = null;
-
         if ($this->browser) {
             $driverFile = $this->findDriverFile($this->browser);
 
@@ -52,7 +51,6 @@ class Selenium extends Server implements ServerInterface {
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
         $response = curl_exec($curl);
-        var_dump($this->validateStatus($response));
 
         return $this->validateStatus($response);
     }
