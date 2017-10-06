@@ -33,5 +33,6 @@ extensions:
         Ychabaniuk\ServerRunner\ServerRunner:
             serverFolder: 'libs/server/'
             driverFolder: 'libs/driver/'
+            serverStartTime: 5
             debug: false
 ```
