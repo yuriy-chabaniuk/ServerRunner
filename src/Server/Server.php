@@ -17,6 +17,8 @@ abstract class Server implements ServerInterface {
 
     const DEFAULT_PORT = '4444';
 
+    const DEFAULT_SERVER_START_TIME = 3;
+
     protected $config = [];
 
     protected $browser = null;
@@ -41,7 +43,7 @@ abstract class Server implements ServerInterface {
         $this->doStart();
 
         /* Let server completely start */
-        sleep(1);
+        $this->sleep();
 
         if ($this->isUp()) {
             return true;
@@ -53,7 +55,9 @@ abstract class Server implements ServerInterface {
     public function stop() {
         $this->doStop();
 
-        sleep(1);
+        /* Let server completely stop */
+        $this->sleep();
+
         if (!$this->isUp()) {
             return true;
         }
@@ -183,5 +187,16 @@ abstract class Server implements ServerInterface {
         $this->browser = $browser;
 
         return $this;
+    }
+
+    /**
+     * Wait before next action to let server completely change state. Up/Down etc.
+     */
+    private function sleep() {
+        $sleep = self::DEFAULT_SERVER_START_TIME;
+        if ($this->config('serverStartTime') > 0) {
+            $sleep = (int)$this->config('serverStartTime');
+        }
+        sleep($sleep);
     }
 }
