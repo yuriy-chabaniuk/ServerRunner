@@ -34,6 +34,34 @@ class Selenium extends Server {
         $this->shell($cmd);
     }
 
+    /**
+     * Returns driver file based on OS.
+     *
+     * @param $driver
+     * @param $folder
+     *
+     * @return string
+     */
+    private function getOSBasedDriver($driver, $folder) {
+        $isSelfHosted = strpos($folder, 'libs/driver') !== false;
+
+        if (strpos($driver, 'driver') === false) {
+            $driver .= 'driver';
+        }
+
+        if ($isSelfHosted) {
+            if ($this->isLinux()) {
+                $driver .= '-linux';
+            } elseif ($this->isWindows()) {
+                $driver .= '.exe';
+            } else {
+                $driver .= '-mac';
+            }
+        }
+
+        return $driver;
+    }
+
     public function doStop() {
         return $this->killProcess('selenium');
     }
@@ -56,6 +84,8 @@ class Selenium extends Server {
 
     private function findDriverFile($driver) {
         $folder = $this->config('driverFolder');
+
+        $driver = $this->getOSBasedDriver($driver, $folder);
 
         $driverFile = null;
         if (!empty($folder)) {

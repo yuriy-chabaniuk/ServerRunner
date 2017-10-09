@@ -2,7 +2,7 @@
     "name": "ychabaniuk/server-runner",
     "description": "Extension for Codeception to run server based on browser.",
     "minimum-stability": "stable",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "license": "MIT",
     "authors": [
         {
